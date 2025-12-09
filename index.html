@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemeliharaan Fasilitas</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #10b981, #059669);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #047857, #0d9488);
+        }
+
+        /* Selection color */
+        ::selection {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Animasi Header Title */
+        .header-title {
+            color: #065f46;
+            animation: slideInTitle 0.8s ease-out, shimmerGlow 3s ease-in-out infinite;
+            position: relative;
+            display: inline-block;
+        }
+
+        @keyframes slideInTitle {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes shimmerGlow {
+            0%, 100% {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.15), 0 0 8px rgba(6, 95, 70, 0.5);
+                transform: scale(1);
+            }
+            50% {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.15), 0 0 20px rgba(4, 120, 87, 0.8), 0 0 30px rgba(6, 95, 70, 0.6);
+                transform: scale(1.01);
+            }
+        }
+
+        /* Loading animation */
+        .loader {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            margin: 0 4px;
+            animation: loading 1.4s infinite;
+        }
+
+        .loader:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loader:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes loading {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1 class="header-title">Pemeliharaan Fasilitas</h1>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#jaringan-listrik">Jaringan Listrik</a></li>
+                    <li><a href="#air-bersih">Air Bersih</a></li>
+                    <li><a href="#air-kotor">Air Kotor</a></li>
+                    <li><a href="#ac">AC</a></li>
+                    <li><a href="#kendaraan">Kendaraan Dinas</a></li>
+                    <li><a href="#gallery">📷 Gallery</a></li>
+                    <li><a href="login.html" style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 5px;">🔐 Login Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="section hero">
+            <div class="container">
+                <h2 style="color: white; font-weight: 900; font-size: 3.5rem; letter-spacing: -2px; text-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 0 40px rgba(16,185,129,0.4); line-height: 1.2;">✨ SISTEM MANAJEMEN PEMELIHARAAN FASILITAS</h2>
+                <p style="font-size: 1.3rem; color: white; font-weight: 600; margin-top: 1.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.2); letter-spacing: 0.5px;">Platform terpadu untuk mengelola pemeliharaan jaringan listrik, air bersih, air kotor, AC, dan kendaraan dinas dengan mudah dan efisien</p>
+            </div>
+        </section>
+
+        <!-- Data Perbaikan Section -->
+        <section id="data-perbaikan" class="section">
+            <div class="container">
+                <h2>📋 Data Perbaikan</h2>
+                
+                <!-- Jaringan Listrik -->
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.3rem; font-weight: 800; border-bottom: 3px solid #10b981; padding-bottom: 1rem;">⚡ Jaringan Listrik</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Teknisi</th>
+                                    <th>Lokasi</th>
+                                    <th>Jenis Kerusakan</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelListrikHome"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Air Bersih -->
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.3rem; font-weight: 800; border-bottom: 3px solid #10b981; padding-bottom: 1rem;">💧 Air Bersih</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Teknisi</th>
+                                    <th>Lokasi</th>
+                                    <th>Jenis Pekerjaan</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelAirBersihHome"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Air Kotor -->
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.3rem; font-weight: 800; border-bottom: 3px solid #10b981; padding-bottom: 1rem;">🚰 Air Kotor</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Teknisi</th>
+                                    <th>Lokasi</th>
+                                    <th>Jenis Pekerjaan</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelAirKotorHome"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- AC -->
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.3rem; font-weight: 800; border-bottom: 3px solid #10b981; padding-bottom: 1rem;">❄️ Perbaikan AC</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Teknisi</th>
+                                    <th>Lokasi</th>
+                                    <th>Jenis Pekerjaan</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelACHome"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Kendaraan Dinas -->
+                <div>
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.3rem; font-weight: 800; border-bottom: 3px solid #10b981; padding-bottom: 1rem;">🚗 Kendaraan Dinas</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Jenis Kendaraan</th>
+                                    <th>Pengemudi</th>
+                                    <th>No Polisi</th>
+                                    <th>Tujuan</th>
+                                    <th>KM / Durasi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelKendaraanHome"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pengumuman & Agenda Section -->
+        <section id="pengumuman-agenda" class="section">
+            <div class="container">
+                <h2>📢 Pengumuman & Agenda Kerja</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                    <!-- Pengumuman -->
+                    <div>
+                        <h3 style="color: #667eea; margin-bottom: 1.5rem; text-align: center; font-size: 1.3rem; font-weight: 700;">📣 Pengumuman Terbaru</h3>
+                        <div id="daftarPengumumanHome" style="display: flex; flex-direction: column; gap: 1rem;">
+                            <p style="text-align: center; color: #999; padding: 2rem;">Tidak ada pengumuman</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Agenda Kerja -->
+                    <div>
+                        <h3 style="color: #16a085; margin-bottom: 1.5rem; text-align: center; font-size: 1.3rem; font-weight: 700;">📅 Agenda Kerja Mendatang</h3>
+                        <div id="daftarAgendaHome" style="display: flex; flex-direction: column; gap: 1rem;">
+                            <p style="text-align: center; color: #999; padding: 2rem;">Tidak ada agenda</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                @media (max-width: 768px) {
+                    #pengumuman-agenda .container > div {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            </style>
+        </section>
+
+        <!-- Jaringan Listrik -->
+        <section id="jaringan-listrik" class="section category-section listrik-section">
+            <div class="container">
+                <h2 class="category-title listrik-title">⚡ Pemeliharaan Jaringan Listrik</h2>
+                
+                <!-- Tabel Data Listrik -->
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 700;">📊 Data Pemeliharaan</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Teknisi</th>
+                                    <th>Lokasi</th>
+                                    <th>Jenis Kerusakan</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelListrikCategory"></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card Info -->
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">⚡</div>
+                        <h3>Inspeksi Rutin</h3>
+                        <p>Pemeriksaan berkala instalasi listrik untuk memastikan keamanan dan fungsi optimal.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔌</div>
+                        <h3>Perbaikan Darurat</h3>
+                        <p>Layanan perbaikan cepat untuk kerusakan listrik yang mendesak.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Jaringan Air Bersih -->
+        <section id="air-bersih" class="section category-section airbersih-section">
+            <div class="container">
+                <h2 class="category-title airbersih-title">💧 Pemeliharaan Jaringan Air Bersih</h2>
+                
+                <!-- Tabel Data Air Bersih -->
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 700;">📊 Data Pemeliharaan</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Teknisi</th>
+                                    <th>Lokasi</th>
+                                    <th>Jenis Pekerjaan</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelAirBersihCategory"></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card Info -->
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">💧</div>
+                        <h3>Pembersihan Tangki</h3>
+                        <p>Pembersihan dan desinfeksi tangki air secara berkala.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔧</div>
+                        <h3>Perbaikan Pipa</h3>
+                        <p>Penggantian dan perbaikan pipa air yang rusak atau bocor.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Jaringan Air Kotor -->
+        <section id="air-kotor" class="section category-section airkotor-section">
+            <div class="container">
+                <h2 class="category-title airkotor-title">🚰 Pemeliharaan Jaringan Air Kotor</h2>
+                
+                <!-- Tabel Data Air Kotor -->
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 700;">📊 Data Pemeliharaan</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Teknisi</th>
+                                    <th>Lokasi</th>
+                                    <th>Jenis Pekerjaan</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelAirKotorCategory"></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card Info -->
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">🚰</div>
+                        <h3>Pemompaan Septic Tank</h3>
+                        <p>Pengurasan dan pembersihan septic tank rutin.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔍</div>
+                        <h3>Inspeksi Saluran</h3>
+                        <p>Pemeriksaan kondisi saluran air kotor dan sistem drainase.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Perbaikan AC -->
+        <section id="ac" class="section category-section ac-section">
+            <div class="container">
+                <h2 class="category-title ac-title">❄️ Perbaikan AC (Pendingin Ruangan)</h2>
+                
+                <!-- Tabel Data AC -->
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 700;">📊 Data Pemeliharaan</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Teknisi</th>
+                                    <th>Lokasi</th>
+                                    <th>Jenis Pekerjaan</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelACCategory"></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card Info -->
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">❄️</div>
+                        <h3>Servis Berkala</h3>
+                        <p>Pembersihan filter, pengecekan refrigeran, dan maintenance rutin.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🛠️</div>
+                        <h3>Perbaikan Unit</h3>
+                        <p>Perbaikan dan penggantian komponen AC yang rusak.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Penggunaan Kendaraan Dinas -->
+        <section id="kendaraan" class="section category-section kendaraan-section">
+            <div class="container">
+                <h2 class="category-title kendaraan-title">🚗 Penggunaan Kendaraan Dinas</h2>
+                
+                <!-- Tabel Data Kendaraan -->
+                <div style="margin-bottom: 3rem;">
+                    <h3 style="color: #047857; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 700;">📊 Data Pemeliharaan</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Jenis Kendaraan</th>
+                                    <th>Pengemudi</th>
+                                    <th>No Polisi</th>
+                                    <th>Tujuan</th>
+                                    <th>KM / Durasi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelKendaraanCategory"></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card Info -->
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">🚗</div>
+                        <h3>Jadwal Perawatan</h3>
+                        <p>Pemeliharaan berkala mesin, oli, dan komponen kendaraan.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📋</div>
+                        <h3>Pencatatan Penggunaan</h3>
+                        <p>Sistem pencatatan peminjaman dan penggunaan kendaraan dinas.</p>
+                    </div>
+                </div>
+
+                <!-- Jadwal Penggunaan Kendaraan -->
+                <div style="margin-top: 4rem; padding-top: 3rem; border-top: 2px solid rgba(168, 85, 247, 0.2);">
+                    <h3 style="color: #9333ea; margin-bottom: 1.5rem; font-size: 1.3rem; font-weight: 800;">📅 Jadwal Penggunaan Kendaraan (1 Tahun ke Depan)</h3>
+                    
+                    <!-- Filter Kendaraan -->
+                    <div style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="vehicle-filter-btn active" data-vehicle="all">Semua Kendaraan</button>
+                        <button class="vehicle-filter-btn" data-vehicle="mobil">🚗 Mobil</button>
+                        <button class="vehicle-filter-btn" data-vehicle="motor">🏍️ Motor</button>
+                        <button class="vehicle-filter-btn" data-vehicle="truck">🚚 Truck</button>
+                    </div>
+
+                    <!-- Kalender Jadwal -->
+                    <div class="vehicle-schedule-container">
+                        <div id="vehicleScheduleCalendar" class="schedule-calendar"></div>
+                    </div>
+
+                    <!-- Daftar Kendaraan & Status -->
+                    <div style="margin-top: 3rem;">
+                        <h4 style="color: #9333ea; margin-bottom: 1.5rem; font-weight: 700;">🚙 Daftar Kendaraan & Status Ketersediaan</h4>
+                        <div id="vehicleStatusGrid" class="vehicle-status-grid"></div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="section gallery-section">
+            <div class="container">
+                <h2>📷 Gallery Dokumentasi Perbaikan</h2>
+                
+                <!-- Category Filter -->
+                <div class="gallery-filter">
+                    <button class="filter-btn active" data-filter="all">Semua</button>
+                    <button class="filter-btn" data-filter="listrik">⚡ Listrik</button>
+                    <button class="filter-btn" data-filter="air-bersih">💧 Air Bersih</button>
+                    <button class="filter-btn" data-filter="air-kotor">🚰 Air Kotor</button>
+                    <button class="filter-btn" data-filter="ac">❄️ AC</button>
+                    <button class="filter-btn" data-filter="kendaraan">🚗 Kendaraan</button>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div class="gallery-grid" id="galleryGrid">
+                    <p style="text-align: center; color: #999; padding: 3rem; grid-column: 1/-1;">Memuat dokumentasi dari Google Drive...</p>
+                </div>
+
+                <!-- Google Drive Link -->
+                <div style="text-align: center; margin-top: 3rem;">
+                    <a href="https://drive.google.com/open?id=13xdF_9lRfyV3ItaKFwWem81NAS2QvjuL&usp=drive_fs" target="_blank" class="btn-google-drive">
+                        <svg style="width: 20px; height: 20px; margin-right: 8px; vertical-align: middle;" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6.634 6.634L2.43 12l4.204 5.366L12 14.83v-5.66L6.634 6.634zm10.732 0L12 9.17v5.66l5.366-2.683L17.57 12l-4.204-5.366z"/>
+                            <path d="M12 2.43L6.634 6.634 12 9.317l5.366-2.683L12 2.43zm0 19.14l5.366-4.204L12 14.683l-5.366 2.683L12 21.57z"/>
+                        </svg>
+                        Buka di Google Drive
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Sistem Pemeliharaan Fasilitas. Semua hak dilindungi.</p>
+            <p>Hubungi kami: <a href="mailto:info@pemeliharaan.com">info@pemeliharaan.com</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

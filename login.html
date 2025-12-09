@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Pemeliharaan Fasilitas</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background: #fadbd8;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Login Admin</h2>
+            <div id="errorMessage" class="error-message"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Masukkan username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Masukkan password">
+                </div>
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+            <div class="back-link">
+                <a href="index.html">← Kembali ke Beranda</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Kredensial admin (dalam praktik real, ini harus di server dengan enkripsi)
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'admin1122';
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Validasi input tidak kosong
+            if (!username || !password) {
+                errorMessage.textContent = 'Username dan password tidak boleh kosong!';
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+                return;
+            }
+
+            // Validasi panjang password minimal
+            if (password.length < 6) {
+                errorMessage.textContent = 'Password minimal 6 karakter!';
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+                return;
+            }
+
+            // Validasi username dan password
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                // Simpan session ke localStorage
+                localStorage.setItem('adminLoggedIn', 'true');
+                localStorage.setItem('adminUsername', username);
+                
+                // Hapus pesan error jika ada
+                errorMessage.style.display = 'none';
+                
+                // Tampilkan loading
+                const btn = event.target.querySelector('button');
+                const originalText = btn.textContent;
+                btn.textContent = 'Memproses...';
+                btn.disabled = true;
+                
+                // Redirect ke dashboard admin setelah 1 detik
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 1000);
+            } else {
+                errorMessage.textContent = 'Username atau password salah!';
+                errorMessage.style.display = 'block';
+                
+                // Hapus pesan error setelah 3 detik
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+                
+                // Kosongkan field password
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        });
+
+        // Fokus ke field password saat enter di username
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('password').focus();
+            }
+        });
+
+        // Submit form saat enter di password
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Clear error message saat user mulai mengetik
+        document.getElementById('username').addEventListener('input', function() {
+            document.getElementById('errorMessage').style.display = 'none';
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            document.getElementById('errorMessage').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
