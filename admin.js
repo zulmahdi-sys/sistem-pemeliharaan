@@ -47,26 +47,70 @@ function showTab(tabName) {
     }
 }
 
-// Submit form
+// Submit form dengan validasi yang lebih baik
 function submitForm(event, category) {
     event.preventDefault();
     
-    let formData = {};
     const form = event.target;
     const formElements = form.elements;
-    
+    let formData = {};
+    let emptyFields = [];
+
+    // Validasi semua field
     for (let i = 0; i < formElements.length; i++) {
         const element = formElements[i];
         if (element.name && element.type !== 'submit' && element.type !== 'reset') {
-            formData[element.id] = element.value;
+            const value = element.value.trim();
+            
+            // Check required fields
+            if (element.required && !value) {
+                emptyFields.push(element.previousElementSibling?.textContent || element.name);
+            }
+            
+            formData[element.id] = value;
         }
     }
-    
+
+    // Jika ada field yang kosong, tampilkan error
+    if (emptyFields.length > 0) {
+        showFormError(category, `Mohon isi field berikut: ${emptyFields.join(', ')}`);
+        return;
+    }
+
+    // Validasi spesifik untuk KM (KM Awal harus lebih kecil dari KM Akhir)
+    if (category === 'kendaraan') {
+        const kmAwal = parseInt(formData.km_awal);
+        const kmAkhir = parseInt(formData.km_akhir);
+        
+        if (kmAkhir <= kmAwal) {
+            showFormError(category, '❌ KM Akhir harus lebih besar dari KM Awal!');
+            return;
+        }
+    }
+
+    // Validasi untuk pengumuman dan agenda
+    if (category === 'pengumuman') {
+        if (!formData.tgl_pengumuman || !formData.judul_pengumuman || !formData.isi_pengumuman) {
+            showFormError(category, 'Mohon isi semua field yang diperlukan!');
+            return;
+        }
+    }
+
+    if (category === 'agenda') {
+        if (!formData.tgl_agenda || !formData.jam_agenda || !formData.judul_agenda || !formData.pic_agenda) {
+            showFormError(category, 'Mohon isi semua field yang diperlukan!');
+            return;
+        }
+    }
+
     // Simpan ke localStorage
     let dataArray = JSON.parse(localStorage.getItem(category) || '[]');
     formData.id = Date.now();
     dataArray.push(formData);
     localStorage.setItem(category, JSON.stringify(dataArray));
+    
+    // Clear error message jika ada
+    hideFormError(category);
     
     // Reset form
     form.reset();
@@ -75,16 +119,70 @@ function submitForm(event, category) {
     const successId = category === 'listrik' ? 'listrikSuccess' : 
                      category === 'air-bersih' ? 'airBersihSuccess' :
                      category === 'air-kotor' ? 'airKotorSuccess' :
-                     category === 'ac' ? 'acSuccess' : 'kendaraanSuccess';
+                     category === 'ac' ? 'acSuccess' :
+                     category === 'kendaraan' ? 'kendaraanSuccess' :
+                     category === 'pengumuman' ? 'pengumumanSuccess' :
+                     category === 'agenda' ? 'agendaSuccess' : null;
     
     const successMessage = document.getElementById(successId);
-    successMessage.style.display = 'block';
+    if (successMessage) {
+        successMessage.style.display = 'block';
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+        }, 3000);
+    }
+    
+    // Scroll ke tabel
     setTimeout(() => {
-        successMessage.style.display = 'none';
-    }, 3000);
+        const tableId = category === 'listrik' ? 'tabelListrik' : 
+                       category === 'air-bersih' ? 'tabelAirBersih' :
+                       category === 'air-kotor' ? 'tabelAirKotor' :
+                       category === 'ac' ? 'tabelAC' :
+                       category === 'kendaraan' ? 'tabelKendaraan' :
+                       category === 'pengumuman' ? 'tabelPengumuman' :
+                       category === 'agenda' ? 'tabelAgenda' : null;
+        
+        const table = document.getElementById(tableId);
+        if (table) {
+            table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 500);
     
     // Muat ulang tabel
     loadTableData(category);
+}
+
+// Show form error
+function showFormError(category, message) {
+    const errorId = category === 'listrik' ? 'listrikError' : 
+                   category === 'air-bersih' ? 'airBersihError' :
+                   category === 'air-kotor' ? 'airKotorError' :
+                   category === 'ac' ? 'acError' :
+                   category === 'kendaraan' ? 'kendaraanError' :
+                   category === 'pengumuman' ? 'pengumumanError' :
+                   category === 'agenda' ? 'agendaError' : null;
+    
+    const errorElement = document.getElementById(errorId);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+}
+
+// Hide form error
+function hideFormError(category) {
+    const errorId = category === 'listrik' ? 'listrikError' : 
+                   category === 'air-bersih' ? 'airBersihError' :
+                   category === 'air-kotor' ? 'airKotorError' :
+                   category === 'ac' ? 'acError' :
+                   category === 'kendaraan' ? 'kendaraanError' :
+                   category === 'pengumuman' ? 'pengumumanError' :
+                   category === 'agenda' ? 'agendaError' : null;
+    
+    const errorElement = document.getElementById(errorId);
+    if (errorElement) {
+        errorElement.style.display = 'none';
+    }
 }
 
 // Load data ke tabel
@@ -107,18 +205,24 @@ function loadTableData(category) {
     } else if (category === 'kendaraan') {
         bodyId = 'bodyTabelKendaraan';
         tableId = 'tabelKendaraan';
+    } else if (category === 'pengumuman') {
+        bodyId = 'bodyTabelPengumuman';
+        tableId = 'tabelPengumuman';
     } else if (category === 'agenda') {
         bodyId = 'bodyTabelAgenda';
         tableId = 'tabelAgenda';
-    } else if (category === 'pengumuman') {
-        loadPengumumanCards();
-        return;
     }
     
     const tbody = document.getElementById(bodyId);
     if (!tbody) return;
     
     tbody.innerHTML = '';
+    
+    if (dataArray.length === 0) {
+        const row = tbody.insertRow();
+        row.innerHTML = `<td colspan="100%" style="text-align: center; color: #999; padding: 2rem;">Belum ada data</td>`;
+        return;
+    }
     
     dataArray.forEach((item, index) => {
         const row = tbody.insertRow();
@@ -174,6 +278,15 @@ function loadTableData(category) {
                 <td>${item.tujuan}</td>
                 <td>${kmTempuh} KM</td>
                 <td>${item.durasi} Jam</td>
+                <td><button class="btn-delete" onclick="deleteData('${category}', ${item.id})">Hapus</button></td>
+            `;
+        } else if (category === 'pengumuman') {
+            const isiPreview = item.isi_pengumuman.substring(0, 50) + (item.isi_pengumuman.length > 50 ? '...' : '');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${item.tgl_pengumuman}</td>
+                <td>${item.judul_pengumuman}</td>
+                <td>${isiPreview}</td>
                 <td><button class="btn-delete" onclick="deleteData('${category}', ${item.id})">Hapus</button></td>
             `;
         } else if (category === 'agenda') {
@@ -899,5 +1012,34 @@ function loadPublicGallery() {
 // Load gallery preview when gallery tab is shown
 function showGalleryTab() {
     loadGalleryPreview();
+}
+
+// Open gallery tab and scroll to the upload form, then focus file input
+function openGalleryUpload() {
+    // Show gallery tab
+    const galleryLink = Array.from(document.querySelectorAll('.menu-link')).find(a => a.textContent && a.textContent.includes('Gallery'));
+    // Use existing showTab function: find menu item for gallery and simulate click
+    try {
+        showTab('gallery');
+    } catch (err) {
+        // fallback: manually activate
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        const galleryTab = document.getElementById('gallery');
+        if (galleryTab) galleryTab.classList.add('active');
+    }
+
+    // Wait for gallery tab to render then scroll to upload form
+    setTimeout(() => {
+        const form = document.getElementById('formGalleryUpload');
+        const fileInput = document.getElementById('gallery_image');
+        if (form) {
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        if (fileInput) {
+            // provide focus by opening file picker on click or focusing the upload button
+            fileInput.focus();
+        }
+    }, 250);
 }
 

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pemeliharaan Fasilitas - Solusi Terpadu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Landing Page Specific Styles */
+        .landing-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1a1a1a 50%, #1f2a3a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+
+        .landing-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(102, 126, 234, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .landing-hero .container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            font-weight: 900;
+            animation: slideInLeft 0.8s ease;
+        }
+
+        .hero-content h1 strong {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            color: #d1d5db;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            animation: slideInLeft 0.8s ease 0.2s both;
+        }
+
+        .hero-form {
+            background: linear-gradient(135deg, rgba(30, 40, 70, 0.8) 0%, rgba(25, 35, 65, 0.8) 100%);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(10px);
+            animation: slideInLeft 0.8s ease 0.4s both;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-form-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-form-group input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 6px;
+            font-size: 1rem;
+            background: rgba(40, 50, 80, 0.6);
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .hero-form-group input::placeholder {
+            color: rgba(229, 231, 235, 0.5);
+        }
+
+        .hero-form-group input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+            background: rgba(50, 60, 90, 0.7);
+        }
+
+        .hero-form-group .btn-get-offer {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            font-size: 1rem;
+        }
+
+        .hero-form-group .btn-get-offer:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+        }
+
+        .hero-subtitle {
+            color: #a7f3d0;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            font-weight: 600;
+            animation: slideInLeft 0.8s ease 0.5s both;
+        }
+
+        .hero-image {
+            position: relative;
+            animation: slideInRight 0.8s ease;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 30px 60px rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        /* Press/Reviews Section */
+        .press-section {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(20, 30, 50, 0.95) 100%);
+            padding: 3rem 0;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+            animation: fadeInSection 0.8s ease 0.6s both;
+        }
+
+        .press-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .press-logos .logo {
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+            color: #9ca3af;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .press-logos .logo:hover {
+            opacity: 1;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1a1a 100%);
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .features-header h2 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            animation: fadeInSection 0.8s ease both;
+        }
+
+        .features-header h2 strong {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-header p {
+            font-size: 1.1rem;
+            color: #d1d5db;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInSection 0.8s ease 0.2s both;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(30, 40, 70, 0.8) 0%, rgba(25, 35, 65, 0.8) 100%);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideInUp 0.6s ease both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.2s; }
+        .feature-card:nth-child(2) { animation-delay: 0.3s; }
+        .feature-card:nth-child(3) { animation-delay: 0.4s; }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .feature-number {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .feature-card p {
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            padding: 4rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
+            animation: fadeInSection 0.8s ease both;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            font-weight: 900;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #34d399;
+            border: 2px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.6);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .landing-hero .container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .hero-image {
+                order: -1;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-form-group {
+                flex-direction: column;
+            }
+
+            .hero-form-group .btn-get-offer {
+                width: 100%;
+            }
+
+            .press-logos {
+                gap: 1.5rem;
+            }
+
+            .features-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .cta-section {
+                padding: 2.5rem 0;
+            }
+
+            .cta-content h2 {
+                font-size: 1.8rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1 class="header-title">Pemeliharaan Fasilitas</h1>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#fitur">Fitur</a></li>
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="admin.html">Admin</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="landing-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Solusi <strong>Pemeliharaan Fasilitas</strong> Terpadu & Efisien</h1>
+                    <p>Kelola seluruh proses pemeliharaan fasilitas dengan sistem terintegrasi yang mudah digunakan. Tingkatkan efisiensi operasional hingga 300%.</p>
+                    
+                    <div class="hero-form">
+                        <div class="hero-form-group">
+                            <input type="email" placeholder="Masukkan alamat email Anda" required>
+                            <button class="btn-get-offer">Dapatkan Demo Gratis</button>
+                        </div>
+                        <p class="hero-subtitle">⚡ Dapatkan akses demo dalam hitungan menit, jual dalam hitungan hari.</p>
+                    </div>
+                </div>
+
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=600&fit=crop" alt="Dashboard Fasilitas">
+                </div>
+            </div>
+        </section>
+
+        <!-- Press Section -->
+        <section class="press-section">
+            <div class="container">
+                <div class="press-logos">
+                    <div class="logo">📰 Industri Terpercaya</div>
+                    <div class="logo">⭐⭐⭐⭐⭐ 4.8/5</div>
+                    <div class="logo">✅ ISO Certified</div>
+                    <div class="logo">🏆 Award Winner</div>
+                    <div class="logo">🚀 Fastest Growing</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section" id="fitur">
+            <div class="container">
+                <div class="features-header">
+                    <h2>Kelola Fasilitas <strong>Dengan Mudah</strong></h2>
+                    <p>Sistem kami dirancang untuk menyederhanakan proses pemeliharaan fasilitas dengan fitur-fitur canggih namun mudah digunakan.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-number">Langkah 1</div>
+                        <div class="feature-icon">📋</div>
+                        <h3>Input Data Fasilitas</h3>
+                        <p>Masukkan data fasilitas Anda dengan cepat dan mudah. Sistem kami mendukung import data dalam berbagai format.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-number">Langkah 2</div>
+                        <div class="feature-icon">📹</div>
+                        <h3>Pantau Real-time</h3>
+                        <p>Pantau status pemeliharaan fasilitas secara real-time melalui dashboard interaktif yang informatif dan mudah dipahami.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-number">Langkah 3</div>
+                        <div class="feature-icon">✅</div>
+                        <h3>Selesaikan & Lapor</h3>
+                        <p>Tandai tugas pemeliharaan sebagai selesai dan buat laporan otomatis. Dapatkan pembayaran dalam waktu singkat.</p>
+                    </div>
+                </div>
+
+                <!-- Additional Features Grid -->
+                <div class="features-grid" style="margin-top: 3rem;">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <h3>Keamanan Data</h3>
+                        <p>Data fasilitas Anda dilindungi dengan enkripsi tingkat enterprise dan backup otomatis setiap hari.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Laporan Analitik</h3>
+                        <p>Dapatkan insights mendalam tentang efisiensi pemeliharaan dengan laporan analitik yang komprehensif.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🤝</div>
+                        <h3>Dukungan 24/7</h3>
+                        <p>Tim dukungan kami siap membantu Anda kapan saja dengan respons cepat dan solusi profesional.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Siap Mulai Mengelola Fasilitas?</h2>
+                    <div class="cta-buttons">
+                        <button class="btn-primary" onclick="window.location.href='#'">Daftar Sekarang</button>
+                        <button class="btn-secondary" onclick="window.location.href='index.html'">Lihat Dashboard</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Sistem Pemeliharaan Fasilitas. Semua hak dilindungi. | <a href="#">Kebijakan Privasi</a> | <a href="#">Syarat Penggunaan</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling untuk navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Form handling untuk demo request
+        document.querySelector('.hero-form-group input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const email = this.value;
+                if (email) {
+                    alert(`Demo gratis telah dikirim ke ${email}`);
+                    this.value = '';
+                }
+            }
+        });
+
+        document.querySelector('.btn-get-offer').addEventListener('click', function() {
+            const emailInput = document.querySelector('.hero-form-group input');
+            const email = emailInput.value;
+            if (email) {
+                alert(`Demo gratis telah dikirim ke ${email}`);
+                emailInput.value = '';
+            } else {
+                alert('Silakan masukkan email Anda terlebih dahulu');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -27,10 +27,11 @@ function loadPengumumanAgendaHome() {
             const card = document.createElement('div');
             card.className = 'pengumuman-card-home';
             card.style.animation = `fadeInUp 0.5s ease ${index * 0.1}s both`;
+            const isiText = getField(item, 'isi_pengumuman', 'isi');
             card.innerHTML = `
-                <div class="tanggal">${formatDate(item.tgl_pengumuman)}</div>
-                <div class="judul">${item.judul_pengumuman}</div>
-                <div class="isi">${item.isi_pengumuman.substring(0, 100)}${item.isi_pengumuman.length > 100 ? '...' : ''}</div>
+                <div class="tanggal">${formatDate(getField(item, 'tgl_pengumuman', 'tgl'))}</div>
+                <div class="judul">${getField(item, 'judul_pengumuman', 'judul')}</div>
+                <div class="isi">${isiText === '-' ? '-' : isiText.substring(0, 100) + (isiText.length > 100 ? '...' : '')}</div>
             `;
             daftarPengumuman.appendChild(card);
         });
@@ -47,11 +48,11 @@ function loadPengumumanAgendaHome() {
             card.className = 'agenda-card-home';
             card.style.animation = `fadeInUp 0.5s ease ${index * 0.1}s both`;
             card.innerHTML = `
-                <div class="jam">⏰ ${item.jam_agenda}</div>
-                <div class="tanggal">${formatDate(item.tgl_agenda)}</div>
-                <div class="judul">${item.judul_agenda}</div>
-                <div class="pic">👤 ${item.pic_agenda}</div>
-                ${item.keterangan_agenda ? `<div class="keterangan">📝 ${item.keterangan_agenda}</div>` : ''}
+                <div class="jam">⏰ ${getField(item, 'jam_agenda', 'jam')}</div>
+                <div class="tanggal">${formatDate(getField(item, 'tgl_agenda', 'tgl'))}</div>
+                <div class="judul">${getField(item, 'judul_agenda', 'judul_agenda')}</div>
+                <div class="pic">👤 ${getField(item, 'pic_agenda', 'pic_agenda')}</div>
+                ${getField(item, 'keterangan_agenda', 'keterangan_agenda') !== '-' ? `<div class="keterangan">📝 ${getField(item, 'keterangan_agenda', 'keterangan_agenda')}</div>` : ''}
             `;
             daftarAgenda.appendChild(card);
         });
@@ -105,49 +106,49 @@ function loadDataHomeTable(category, containerId) {
         if (category === 'listrik') {
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_listrik)}</td>
-                <td>${item.teknisi_listrik}</td>
-                <td>${item.lokasi_listrik}</td>
-                <td>${item.jenis_kerusakan_listrik}</td>
-                <td>${item.deskripsi_listrik}</td>
+                <td>${formatDate(getField(item, 'tgl_listrik', 'tgl'))}</td>
+                <td>${getField(item, 'teknisi_listrik', 'teknisi')}</td>
+                <td>${getField(item, 'lokasi_listrik', 'lokasi')}</td>
+                <td>${getField(item, 'jenis_kerusakan_listrik', 'jenis_kerusakan')}</td>
+                <td>${getField(item, 'deskripsi_listrik', 'deskripsi')}</td>
             `;
         } else if (category === 'air-bersih') {
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_air_bersih)}</td>
-                <td>${item.teknisi_air_bersih}</td>
-                <td>${item.lokasi_air_bersih}</td>
-                <td>${item.jenis_pekerjaan_air_bersih}</td>
-                <td>${item.deskripsi_air_bersih}</td>
+                <td>${formatDate(getField(item, 'tgl_air_bersih', 'tgl'))}</td>
+                <td>${getField(item, 'teknisi_air_bersih', 'teknisi')}</td>
+                <td>${getField(item, 'lokasi_air_bersih', 'lokasi')}</td>
+                <td>${getField(item, 'jenis_pekerjaan_air_bersih', 'jenis_pekerjaan')}</td>
+                <td>${getField(item, 'deskripsi_air_bersih', 'deskripsi')}</td>
             `;
         } else if (category === 'air-kotor') {
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_air_kotor)}</td>
-                <td>${item.teknisi_air_kotor}</td>
-                <td>${item.lokasi_air_kotor}</td>
-                <td>${item.jenis_pekerjaan_air_kotor}</td>
-                <td>${item.deskripsi_air_kotor}</td>
+                <td>${formatDate(getField(item, 'tgl_air_kotor', 'tgl'))}</td>
+                <td>${getField(item, 'teknisi_air_kotor', 'teknisi')}</td>
+                <td>${getField(item, 'lokasi_air_kotor', 'lokasi')}</td>
+                <td>${getField(item, 'jenis_pekerjaan_air_kotor', 'jenis_pekerjaan')}</td>
+                <td>${getField(item, 'deskripsi_air_kotor', 'deskripsi')}</td>
             `;
         } else if (category === 'ac') {
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_ac)}</td>
-                <td>${item.teknisi_ac}</td>
-                <td>${item.lokasi_ac}</td>
-                <td>${item.jenis_pekerjaan_ac}</td>
-                <td>${item.deskripsi_ac}</td>
+                <td>${formatDate(getField(item, 'tgl_ac', 'tgl'))}</td>
+                <td>${getField(item, 'teknisi_ac', 'teknisi')}</td>
+                <td>${getField(item, 'lokasi_ac', 'lokasi')}</td>
+                <td>${getField(item, 'jenis_pekerjaan_ac', 'jenis_pekerjaan')}</td>
+                <td>${getField(item, 'deskripsi_ac', 'deskripsi')}</td>
             `;
         } else if (category === 'kendaraan') {
-            const kmTempuh = item.km_akhir - item.km_awal;
+            const kmTempuh = calcKm(item);
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_kendaraan)}</td>
-                <td>${item.jenis_kendaraan}</td>
-                <td>${item.pengemudi}</td>
-                <td>${item.no_polisi}</td>
-                <td>${item.tujuan}</td>
-                <td>${kmTempuh} KM / ${item.durasi} Jam</td>
+                <td>${formatDate(getField(item, 'tgl_kendaraan', 'tgl'))}</td>
+                <td>${getField(item, 'jenis_kendaraan', 'jenis_kendaraan')}</td>
+                <td>${getField(item, 'pengemudi', 'driver')}</td>
+                <td>${getField(item, 'no_polisi', 'noPolisi')}</td>
+                <td>${getField(item, 'tujuan', 'purpose')}</td>
+                <td>${kmTempuh === '-' ? '-' : kmTempuh + ' KM'} / ${getField(item, 'durasi', 'duration')} Jam</td>
             `;
         }
     });
@@ -187,53 +188,52 @@ function loadCategoryTable(category, containerId) {
     
     dataArray.forEach((item, index) => {
         const row = container.insertRow();
-        
         if (category === 'listrik') {
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_listrik)}</td>
-                <td>${item.teknisi_listrik}</td>
-                <td>${item.lokasi_listrik}</td>
-                <td>${item.jenis_kerusakan_listrik}</td>
-                <td>${item.deskripsi_listrik}</td>
+                <td>${formatDate(getField(item, 'tgl_listrik', 'tgl'))}</td>
+                <td>${getField(item, 'teknisi_listrik', 'teknisi')}</td>
+                <td>${getField(item, 'lokasi_listrik', 'lokasi')}</td>
+                <td>${getField(item, 'jenis_kerusakan_listrik', 'jenis_kerusakan')}</td>
+                <td>${getField(item, 'deskripsi_listrik', 'deskripsi')}</td>
             `;
         } else if (category === 'air-bersih') {
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_air_bersih)}</td>
-                <td>${item.teknisi_air_bersih}</td>
-                <td>${item.lokasi_air_bersih}</td>
-                <td>${item.jenis_pekerjaan_air_bersih}</td>
-                <td>${item.deskripsi_air_bersih}</td>
+                <td>${formatDate(getField(item, 'tgl_air_bersih', 'tgl'))}</td>
+                <td>${getField(item, 'teknisi_air_bersih', 'teknisi')}</td>
+                <td>${getField(item, 'lokasi_air_bersih', 'lokasi')}</td>
+                <td>${getField(item, 'jenis_pekerjaan_air_bersih', 'jenis_pekerjaan')}</td>
+                <td>${getField(item, 'deskripsi_air_bersih', 'deskripsi')}</td>
             `;
         } else if (category === 'air-kotor') {
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_air_kotor)}</td>
-                <td>${item.teknisi_air_kotor}</td>
-                <td>${item.lokasi_air_kotor}</td>
-                <td>${item.jenis_pekerjaan_air_kotor}</td>
-                <td>${item.deskripsi_air_kotor}</td>
+                <td>${formatDate(getField(item, 'tgl_air_kotor', 'tgl'))}</td>
+                <td>${getField(item, 'teknisi_air_kotor', 'teknisi')}</td>
+                <td>${getField(item, 'lokasi_air_kotor', 'lokasi')}</td>
+                <td>${getField(item, 'jenis_pekerjaan_air_kotor', 'jenis_pekerjaan')}</td>
+                <td>${getField(item, 'deskripsi_air_kotor', 'deskripsi')}</td>
             `;
         } else if (category === 'ac') {
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_ac)}</td>
-                <td>${item.teknisi_ac}</td>
-                <td>${item.lokasi_ac}</td>
-                <td>${item.jenis_pekerjaan_ac}</td>
-                <td>${item.deskripsi_ac}</td>
+                <td>${formatDate(getField(item, 'tgl_ac', 'tgl'))}</td>
+                <td>${getField(item, 'teknisi_ac', 'teknisi')}</td>
+                <td>${getField(item, 'lokasi_ac', 'lokasi')}</td>
+                <td>${getField(item, 'jenis_pekerjaan_ac', 'jenis_pekerjaan')}</td>
+                <td>${getField(item, 'deskripsi_ac', 'deskripsi')}</td>
             `;
         } else if (category === 'kendaraan') {
-            const kmTempuh = item.km_akhir - item.km_awal;
+            const kmTempuh = calcKm(item);
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${formatDate(item.tgl_kendaraan)}</td>
-                <td>${item.jenis_kendaraan}</td>
-                <td>${item.pengemudi}</td>
-                <td>${item.no_polisi}</td>
-                <td>${item.tujuan}</td>
-                <td>${kmTempuh} KM / ${item.durasi} Jam</td>
+                <td>${formatDate(getField(item, 'tgl_kendaraan', 'tgl'))}</td>
+                <td>${getField(item, 'jenis_kendaraan', 'jenis_kendaraan')}</td>
+                <td>${getField(item, 'pengemudi', 'driver')}</td>
+                <td>${getField(item, 'no_polisi', 'noPolisi')}</td>
+                <td>${getField(item, 'tujuan', 'purpose')}</td>
+                <td>${kmTempuh === '-' ? '-' : kmTempuh + ' KM'} / ${getField(item, 'durasi', 'duration')} Jam</td>
             `;
         }
     });
@@ -261,53 +261,52 @@ function loadDataCategory(category, containerId, type) {
     if (container.tagName === 'TBODY') {
         dataArray.forEach((item, index) => {
             const row = container.insertRow();
-            
             if (category === 'listrik') {
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${formatDate(item.tgl_listrik)}</td>
-                    <td>${item.teknisi_listrik}</td>
-                    <td>${item.lokasi_listrik}</td>
-                    <td>${item.jenis_kerusakan_listrik}</td>
-                    <td>${item.deskripsi_listrik}</td>
+                    <td>${formatDate(getField(item, 'tgl_listrik', 'tgl'))}</td>
+                    <td>${getField(item, 'teknisi_listrik', 'teknisi')}</td>
+                    <td>${getField(item, 'lokasi_listrik', 'lokasi')}</td>
+                    <td>${getField(item, 'jenis_kerusakan_listrik', 'jenis_kerusakan')}</td>
+                    <td>${getField(item, 'deskripsi_listrik', 'deskripsi')}</td>
                 `;
             } else if (category === 'air-bersih') {
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${formatDate(item.tgl_air_bersih)}</td>
-                    <td>${item.teknisi_air_bersih}</td>
-                    <td>${item.lokasi_air_bersih}</td>
-                    <td>${item.jenis_pekerjaan_air_bersih}</td>
-                    <td>${item.deskripsi_air_bersih}</td>
+                    <td>${formatDate(getField(item, 'tgl_air_bersih', 'tgl'))}</td>
+                    <td>${getField(item, 'teknisi_air_bersih', 'teknisi')}</td>
+                    <td>${getField(item, 'lokasi_air_bersih', 'lokasi')}</td>
+                    <td>${getField(item, 'jenis_pekerjaan_air_bersih', 'jenis_pekerjaan')}</td>
+                    <td>${getField(item, 'deskripsi_air_bersih', 'deskripsi')}</td>
                 `;
             } else if (category === 'air-kotor') {
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${formatDate(item.tgl_air_kotor)}</td>
-                    <td>${item.teknisi_air_kotor}</td>
-                    <td>${item.lokasi_air_kotor}</td>
-                    <td>${item.jenis_pekerjaan_air_kotor}</td>
-                    <td>${item.deskripsi_air_kotor}</td>
+                    <td>${formatDate(getField(item, 'tgl_air_kotor', 'tgl'))}</td>
+                    <td>${getField(item, 'teknisi_air_kotor', 'teknisi')}</td>
+                    <td>${getField(item, 'lokasi_air_kotor', 'lokasi')}</td>
+                    <td>${getField(item, 'jenis_pekerjaan_air_kotor', 'jenis_pekerjaan')}</td>
+                    <td>${getField(item, 'deskripsi_air_kotor', 'deskripsi')}</td>
                 `;
             } else if (category === 'ac') {
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${formatDate(item.tgl_ac)}</td>
-                    <td>${item.teknisi_ac}</td>
-                    <td>${item.lokasi_ac}</td>
-                    <td>${item.jenis_pekerjaan_ac}</td>
-                    <td>${item.deskripsi_ac}</td>
+                    <td>${formatDate(getField(item, 'tgl_ac', 'tgl'))}</td>
+                    <td>${getField(item, 'teknisi_ac', 'teknisi')}</td>
+                    <td>${getField(item, 'lokasi_ac', 'lokasi')}</td>
+                    <td>${getField(item, 'jenis_pekerjaan_ac', 'jenis_pekerjaan')}</td>
+                    <td>${getField(item, 'deskripsi_ac', 'deskripsi')}</td>
                 `;
             } else if (category === 'kendaraan') {
-                const kmTempuh = item.km_akhir - item.km_awal;
+                const kmTempuh = calcKm(item);
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${formatDate(item.tgl_kendaraan)}</td>
-                    <td>${item.jenis_kendaraan}</td>
-                    <td>${item.pengemudi}</td>
-                    <td>${item.no_polisi}</td>
-                    <td>${item.tujuan}</td>
-                    <td>${kmTempuh} KM / ${item.durasi} Jam</td>
+                    <td>${formatDate(getField(item, 'tgl_kendaraan', 'tgl'))}</td>
+                    <td>${getField(item, 'jenis_kendaraan', 'jenis_kendaraan')}</td>
+                    <td>${getField(item, 'pengemudi', 'driver')}</td>
+                    <td>${getField(item, 'no_polisi', 'noPolisi')}</td>
+                    <td>${getField(item, 'tujuan', 'purpose')}</td>
+                    <td>${kmTempuh === '-' ? '-' : kmTempuh + ' KM'} / ${getField(item, 'durasi', 'duration')} Jam</td>
                 `;
             }
         });
@@ -322,94 +321,94 @@ function loadDataCategory(category, containerId, type) {
             
             if (type === 'jaringan-listrik') {
                 content = `
-                    <div class="tanggal">${formatDate(item.tgl_listrik)}</div>
-                    <div class="label">${item.jenis_kerusakan_listrik}</div>
+                    <div class="tanggal">${formatDate(getField(item, 'tgl_listrik', 'tgl'))}</div>
+                    <div class="label">${getField(item, 'jenis_kerusakan_listrik', 'jenis_kerusakan')}</div>
                     <div class="info-item">
                         <div class="info-label">👨‍🔧 Teknisi</div>
-                        <div class="info-value">${item.teknisi_listrik}</div>
+                        <div class="info-value">${getField(item, 'teknisi_listrik', 'teknisi')}</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">📍 Lokasi</div>
-                        <div class="info-value">${item.lokasi_listrik}</div>
+                        <div class="info-value">${getField(item, 'lokasi_listrik', 'lokasi')}</div>
                     </div>
                     <div class="deskripsi">
                         <strong>📝 Deskripsi:</strong><br>
-                        ${item.deskripsi_listrik}
+                        ${getField(item, 'deskripsi_listrik', 'deskripsi')}
                     </div>
                 `;
             } else if (type === 'air-bersih') {
                 content = `
-                    <div class="tanggal">${formatDate(item.tgl_air_bersih)}</div>
-                    <div class="label">${item.jenis_pekerjaan_air_bersih}</div>
+                    <div class="tanggal">${formatDate(getField(item, 'tgl_air_bersih', 'tgl'))}</div>
+                    <div class="label">${getField(item, 'jenis_pekerjaan_air_bersih', 'jenis_pekerjaan')}</div>
                     <div class="info-item">
                         <div class="info-label">👨‍🔧 Teknisi</div>
-                        <div class="info-value">${item.teknisi_air_bersih}</div>
+                        <div class="info-value">${getField(item, 'teknisi_air_bersih', 'teknisi')}</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">📍 Lokasi</div>
-                        <div class="info-value">${item.lokasi_air_bersih}</div>
+                        <div class="info-value">${getField(item, 'lokasi_air_bersih', 'lokasi')}</div>
                     </div>
                     <div class="deskripsi">
                         <strong>📝 Deskripsi:</strong><br>
-                        ${item.deskripsi_air_bersih}
+                        ${getField(item, 'deskripsi_air_bersih', 'deskripsi')}
                     </div>
                 `;
             } else if (type === 'air-kotor') {
                 content = `
-                    <div class="tanggal">${formatDate(item.tgl_air_kotor)}</div>
-                    <div class="label">${item.jenis_pekerjaan_air_kotor}</div>
+                    <div class="tanggal">${formatDate(getField(item, 'tgl_air_kotor', 'tgl'))}</div>
+                    <div class="label">${getField(item, 'jenis_pekerjaan_air_kotor', 'jenis_pekerjaan')}</div>
                     <div class="info-item">
                         <div class="info-label">👨‍🔧 Teknisi</div>
-                        <div class="info-value">${item.teknisi_air_kotor}</div>
+                        <div class="info-value">${getField(item, 'teknisi_air_kotor', 'teknisi')}</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">📍 Lokasi</div>
-                        <div class="info-value">${item.lokasi_air_kotor}</div>
+                        <div class="info-value">${getField(item, 'lokasi_air_kotor', 'lokasi')}</div>
                     </div>
                     <div class="deskripsi">
                         <strong>📝 Deskripsi:</strong><br>
-                        ${item.deskripsi_air_kotor}
+                        ${getField(item, 'deskripsi_air_kotor', 'deskripsi')}
                     </div>
                 `;
             } else if (type === 'ac') {
                 content = `
-                    <div class="tanggal">${formatDate(item.tgl_ac)}</div>
-                    <div class="label">${item.jenis_pekerjaan_ac}</div>
+                    <div class="tanggal">${formatDate(getField(item, 'tgl_ac', 'tgl'))}</div>
+                    <div class="label">${getField(item, 'jenis_pekerjaan_ac', 'jenis_pekerjaan')}</div>
                     <div class="info-item">
                         <div class="info-label">👨‍🔧 Teknisi</div>
-                        <div class="info-value">${item.teknisi_ac}</div>
+                        <div class="info-value">${getField(item, 'teknisi_ac', 'teknisi')}</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">📍 Lokasi</div>
-                        <div class="info-value">${item.lokasi_ac}</div>
+                        <div class="info-value">${getField(item, 'lokasi_ac', 'lokasi')}</div>
                     </div>
                     <div class="deskripsi">
                         <strong>📝 Deskripsi:</strong><br>
-                        ${item.deskripsi_ac}
+                        ${getField(item, 'deskripsi_ac', 'deskripsi')}
                     </div>
                 `;
             } else if (type === 'kendaraan') {
-                const kmTempuh = item.km_akhir - item.km_awal;
+                const kmTempuh = calcKm(item);
                 content = `
-                    <div class="tanggal">${formatDate(item.tgl_kendaraan)}</div>
-                    <div class="label">${item.jenis_kendaraan}</div>
+                    <div class="tanggal">${formatDate(getField(item, 'tgl_kendaraan', 'tgl'))}</div>
+                    <div class="label">${getField(item, 'jenis_kendaraan', 'jenis_kendaraan')}</div>
                     <div class="info-item">
                         <div class="info-label">👨‍💼 Pengemudi</div>
-                        <div class="info-value">${item.pengemudi}</div>
+                        <div class="info-value">${getField(item, 'pengemudi', 'driver')}</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">🚗 Nomor Polisi</div>
-                        <div class="info-value">${item.no_polisi}</div>
+                        <div class="info-value">${getField(item, 'no_polisi', 'noPolisi')}</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">🎯 Tujuan</div>
-                        <div class="info-value">${item.tujuan}</div>
+                        <div class="info-value">${getField(item, 'tujuan', 'purpose')}</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">📏 KM Tempuh / Durasi</div>
-                        <div class="info-value">${kmTempuh} KM / ${item.durasi} Jam</div>
+                        <div class="info-value">${kmTempuh === '-' ? '-' : kmTempuh + ' KM'} / ${getField(item, 'durasi', 'duration')} Jam</div>
                     </div>
-                    ${item.keterangan_kendaraan ? `<div class="deskripsi"><strong>📝 Keterangan:</strong><br>${item.keterangan_kendaraan}</div>` : ''}
+                    ${getField(item, 'keterangan_kendaraan', 'keterangan_kendaraan') !== '-' ? `<div class="deskripsi"><strong>📝 Keterangan:</strong><br>${getField(item, 'keterangan_kendaraan', 'keterangan_kendaraan')}</div>` : ''}
                 `;
             }
             
@@ -421,8 +420,31 @@ function loadDataCategory(category, containerId, type) {
 
 // Format tanggal Indonesia
 function formatDate(dateString) {
-    const options = { year: 'numeric', month: 'long', day: 'numeric', locale: 'id-ID' };
-    return new Date(dateString + 'T00:00:00').toLocaleDateString('id-ID', options);
+    if (!dateString) return '-';
+    // Accept already ISO dates or plain date strings; ensure valid date
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '-';
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('id-ID', options);
+}
+
+// Safely get first available field from an object
+function getField(obj, ...keys) {
+    for (const k of keys) {
+        if (!obj) continue;
+        const v = obj[k];
+        if (v !== undefined && v !== null && String(v).trim() !== '') return v;
+    }
+    return '-';
+}
+
+// Calculate KM tempuh safely
+function calcKm(item) {
+    if (!item) return '-';
+    const start = Number(item.km_awal);
+    const end = Number(item.km_akhir);
+    if (!isNaN(start) && !isNaN(end)) return end - start;
+    return '-';
 }
 
 // Tambahkan animasi CSS

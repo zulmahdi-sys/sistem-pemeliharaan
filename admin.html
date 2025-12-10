@@ -8,26 +8,48 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
     <style>
+        /* Modern 3D Admin Dashboard */
         .admin-container {
             display: flex;
             min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1a1a 100%);
         }
 
         .sidebar {
             width: 250px;
-            background: #2c3e50;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(20, 30, 50, 0.95) 100%);
             color: white;
             padding: 2rem 0;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
+            backdrop-filter: blur(10px);
+            border-right: 2px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+            animation: slideInLeft 0.6s ease;
+            z-index: 100;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .sidebar h3 {
             padding: 1rem 1.5rem;
             margin: 0;
             font-size: 1.2rem;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, transparent 100%);
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            color: #ffffff;
         }
 
         .sidebar ul {
@@ -44,57 +66,112 @@
             padding: 1rem 1.5rem;
             color: white;
             text-decoration: none;
-            transition: background 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(180deg, #10b981, #34d399);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar a:hover::before {
+            transform: scaleY(1);
         }
 
         .sidebar a:hover,
         .sidebar a.active {
-            background: #667eea;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
             border-left-color: white;
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            color: #ffffff;
         }
 
         .main-content {
             margin-left: 250px;
             flex: 1;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1a1a 100%);
+            animation: slideInRight 0.6s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .admin-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
             padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+            border-bottom: 2px solid rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(10px);
+            animation: slideDown 0.6s ease;
         }
 
         .admin-header h1 {
             margin: 0;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            color: #ffffff;
         }
 
         .logout-btn {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             color: white;
             padding: 0.6rem 1.2rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         }
 
         .logout-btn:hover {
-            background: #c0392b;
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.5);
+        }
+
+        .logout-btn:active {
+            transform: translateY(0);
         }
 
         .content {
             padding: 2rem;
+            animation: fadeIn 0.6s ease 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .tab-content {
             display: none;
+            animation: fadeIn 0.4s ease;
         }
 
         .tab-content.active {
@@ -102,22 +179,41 @@
         }
 
         .form-container {
-            background: white;
+            background: linear-gradient(135deg, rgba(25, 35, 65, 0.8) 0%, rgba(20, 30, 50, 0.8) 100%);
             padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(20px);
+            animation: slideInUp 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            animation: slideIn 0.8s ease 0.2s both;
         }
 
         .form-container h2 {
-            color: #667eea;
+            color: #ffffff;
             margin-bottom: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-row.full {
@@ -131,26 +227,31 @@
 
         .form-group label {
             margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 500;
+            color: #e5e7eb;
+            font-weight: 600;
         }
 
         .form-group input,
         .form-group textarea,
         .form-group select {
             padding: 0.8rem;
-            border: 2px solid #ddd;
+            border: 2px solid rgba(16, 185, 129, 0.3);
             border-radius: 5px;
             font-size: 1rem;
             font-family: inherit;
             transition: border-color 0.3s ease;
+            background: rgba(30, 40, 70, 0.6);
+            color: #ffffff;
         }
 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+            background: linear-gradient(135deg, rgba(40, 50, 80, 0.8) 0%, rgba(30, 40, 70, 0.8) 100%);
+            transform: translateY(-2px);
         }
 
         .form-group textarea {
@@ -162,39 +263,46 @@
             display: flex;
             gap: 1rem;
             margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(16, 185, 129, 0.2);
         }
 
         .btn {
-            padding: 0.8rem 1.5rem;
+            padding: 0.9rem 1.8rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .btn-submit {
-            background: #667eea;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
+            flex: 1;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
         }
 
         .btn-submit:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.6);
         }
 
         .btn-reset {
-            background: #95a5a6;
-            color: white;
+            background: linear-gradient(135deg, rgba(75, 85, 115, 0.8) 0%, rgba(65, 75, 105, 0.8) 100%);
+            color: #e5e7eb;
+            border: 2px solid rgba(16, 185, 129, 0.3);
         }
 
         .btn-reset:hover {
-            background: #7f8c8d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
         }
 
         .btn-export {
-            background: #27ae60;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
             color: white;
             padding: 0.8rem 1.5rem;
             border: none;
@@ -210,33 +318,38 @@
         }
 
         .btn-export-pdf {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
         }
 
         .btn-export-pdf:hover {
-            background: #c0392b;
+            box-shadow: 0 12px 30px rgba(231, 76, 60, 0.6);
         }
 
         .btn-export-excel {
-            background: #16a085;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
         }
 
         .btn-export-excel:hover {
-            background: #138d75;
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.6);
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 2rem;
-            background: white;
-            border-radius: 5px;
+            background: linear-gradient(135deg, rgba(25, 35, 65, 0.8) 0%, rgba(20, 30, 50, 0.8) 100%);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            animation: slideInUp 0.6s ease 0.2s both;
+            backdrop-filter: blur(10px);
         }
 
         .data-table thead {
-            background: #667eea;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
         }
 
@@ -244,15 +357,18 @@
             padding: 1rem;
             text-align: left;
             font-weight: bold;
+            color: #ffffff;
         }
 
         .data-table td {
             padding: 1rem;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+            color: #e5e7eb;
         }
 
         .data-table tbody tr:hover {
-            background: #f9f9f9;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%);
+            transform: translateX(4px);
         }
 
         .btn-delete {
@@ -263,19 +379,23 @@
             border-radius: 3px;
             cursor: pointer;
             font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
 
         .btn-delete:hover {
             background: #c0392b;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+            transform: translateY(-2px);
         }
 
         .success-message {
-            background: #d4edda;
-            color: #155724;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(52, 211, 153, 0.1) 100%);
+            color: #a7f3d0;
             padding: 1rem;
             border-radius: 5px;
             margin-bottom: 1rem;
             display: none;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .export-buttons {
@@ -330,6 +450,7 @@
                 <li><a href="#" onclick="showTab('ac')" class="menu-link">❄️ Perbaikan AC</a></li>
                 <li><a href="#" onclick="showTab('kendaraan')" class="menu-link">🚗 Kendaraan Dinas</a></li>
                 <li><a href="#" onclick="showTab('gallery')" class="menu-link">📷 Gallery Dokumentasi</a></li>
+                	<li><a href="#" onclick="openGalleryUpload()" class="menu-link">➕ Upload Dokumentasi</a></li>
                 <li><a href="#" onclick="logout()" style="color: #e74c3c; border-left-color: #e74c3c;">🚪 Logout</a></li>
             </ul>
         </div>
@@ -345,31 +466,150 @@
             </div>
 
             <div class="content">
-                <!-- Tab Jaringan Listrik -->
-                <div id="listrik" class="tab-content active">
+                <!-- Tab Pengumuman -->
+                <div id="pengumuman" class="tab-content">
                     <div class="form-container">
-                        <h2>Input Pemeliharaan Jaringan Listrik</h2>
-                        <div class="success-message" id="listrikSuccess">Data berhasil disimpan!</div>
-                        <form id="formListrik" onsubmit="submitForm(event, 'listrik')">
+                        <h2>📢 Input Pengumuman</h2>
+                        <div class="success-message" id="pengumumanSuccess" style="display: none;">✓ Pengumuman berhasil disimpan!</div>
+                        <div class="error-message" id="pengumumanError" style="display: none;"></div>
+                        <form id="formPengumuman" onsubmit="submitForm(event, 'pengumuman')" class="admin-form">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="tgl_listrik">Tanggal Pemeliharaan</label>
-                                    <input type="date" id="tgl_listrik" required>
+                                    <label for="tgl_pengumuman">📅 Tanggal Pengumuman</label>
+                                    <input type="date" id="tgl_pengumuman" required class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label for="judul_pengumuman">📝 Judul Pengumuman</label>
+                                    <input type="text" id="judul_pengumuman" required placeholder="Masukkan judul pengumuman..." class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label for="isi_pengumuman">📄 Isi Pengumuman</label>
+                                    <textarea id="isi_pengumuman" required placeholder="Masukkan isi pengumuman lengkap..." class="form-input" style="min-height: 150px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-buttons">
+                                <button type="submit" class="btn btn-submit">✓ Simpan Pengumuman</button>
+                                <button type="reset" class="btn btn-reset">🔄 Reset</button>
+                            </div>
+                        </form>
+
+                        <h3 style="margin-top: 3rem; color: #667eea;">Daftar Pengumuman</h3>
+                        <table class="data-table" id="tabelPengumuman">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Judul</th>
+                                    <th>Isi</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyTabelPengumuman">
+                            </tbody>
+                        </table>
+
+                        <div class="export-buttons">
+                            <button class="btn btn-export btn-export-pdf" onclick="exportPDF('pengumuman')">📄 Export PDF</button>
+                            <button class="btn btn-export btn-export-excel" onclick="exportExcel('pengumuman')">📊 Export Excel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Agenda -->
+                <div id="agenda" class="tab-content">
+                    <div class="form-container">
+                        <h2>📅 Input Agenda Kerja</h2>
+                        <div class="success-message" id="agendaSuccess" style="display: none;">✓ Agenda berhasil disimpan!</div>
+                        <div class="error-message" id="agendaError" style="display: none;"></div>
+                        <form id="formAgenda" onsubmit="submitForm(event, 'agenda')" class="admin-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tgl_agenda">📅 Tanggal Agenda</label>
+                                    <input type="date" id="tgl_agenda" required class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="teknisi_listrik">Nama Teknisi</label>
-                                    <input type="text" id="teknisi_listrik" required placeholder="Nama teknisi">
+                                    <label for="jam_agenda">⏰ Jam Mulai</label>
+                                    <input type="time" id="jam_agenda" required class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label for="judul_agenda">📝 Judul Agenda</label>
+                                    <input type="text" id="judul_agenda" required placeholder="Masukkan judul agenda..." class="form-input">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="lokasi_listrik">Lokasi Perbaikan</label>
-                                    <input type="text" id="lokasi_listrik" required placeholder="Lokasi">
+                                    <label for="pic_agenda">👤 PIC (Person In Charge)</label>
+                                    <input type="text" id="pic_agenda" required placeholder="Nama penanggung jawab..." class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label for="keterangan_agenda">📄 Keterangan Agenda</label>
+                                    <textarea id="keterangan_agenda" placeholder="Keterangan tambahan (opsional)..." class="form-input" style="min-height: 120px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-buttons">
+                                <button type="submit" class="btn btn-submit">✓ Simpan Agenda</button>
+                                <button type="reset" class="btn btn-reset">🔄 Reset</button>
+                            </div>
+                        </form>
+
+                        <h3 style="margin-top: 3rem; color: #667eea;">Daftar Agenda Kerja</h3>
+                        <table class="data-table" id="tabelAgenda">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Jam</th>
+                                    <th>Judul</th>
+                                    <th>PIC</th>
+                                    <th>Keterangan</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyTabelAgenda">
+                            </tbody>
+                        </table>
+
+                        <div class="export-buttons">
+                            <button class="btn btn-export btn-export-pdf" onclick="exportPDF('agenda')">📄 Export PDF</button>
+                            <button class="btn btn-export btn-export-excel" onclick="exportExcel('agenda')">📊 Export Excel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Jaringan Listrik -->
+                <div id="listrik" class="tab-content active">
+                    <div class="form-container">
+                        <h2>⚡ Input Pemeliharaan Jaringan Listrik</h2>
+                        <div class="success-message" id="listrikSuccess" style="display: none;">✓ Data berhasil disimpan!</div>
+                        <div class="error-message" id="listrikError" style="display: none;"></div>
+                        <form id="formListrik" onsubmit="submitForm(event, 'listrik')" class="admin-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tgl_listrik">📅 Tanggal Pemeliharaan</label>
+                                    <input type="date" id="tgl_listrik" required class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="jenis_kerusakan_listrik">Jenis Kerusakan</label>
-                                    <select id="jenis_kerusakan_listrik" required>
-                                        <option value="">Pilih jenis kerusakan</option>
+                                    <label for="teknisi_listrik">👨‍🔧 Nama Teknisi</label>
+                                    <input type="text" id="teknisi_listrik" required placeholder="Masukkan nama teknisi" class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="lokasi_listrik">📍 Lokasi Perbaikan</label>
+                                    <input type="text" id="lokasi_listrik" required placeholder="Contoh: Ruang Server, Panel Utama, dll" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="jenis_kerusakan_listrik">⚠️ Jenis Kerusakan</label>
+                                    <select id="jenis_kerusakan_listrik" required class="form-input">
+                                        <option value="">-- Pilih jenis kerusakan --</option>
                                         <option value="Putus">Putus</option>
                                         <option value="Hubung Singkat">Hubung Singkat</option>
                                         <option value="Korsleting">Korsleting</option>
@@ -379,13 +619,13 @@
                             </div>
                             <div class="form-row full">
                                 <div class="form-group">
-                                    <label for="deskripsi_listrik">Deskripsi Perbaikan</label>
-                                    <textarea id="deskripsi_listrik" required placeholder="Jelaskan detail perbaikan yang dilakukan"></textarea>
+                                    <label for="deskripsi_listrik">📝 Deskripsi Perbaikan</label>
+                                    <textarea id="deskripsi_listrik" required placeholder="Jelaskan detail perbaikan yang dilakukan..." class="form-input" style="min-height: 120px;"></textarea>
                                 </div>
                             </div>
                             <div class="form-buttons">
-                                <button type="submit" class="btn btn-submit">Simpan Data</button>
-                                <button type="reset" class="btn btn-reset">Reset</button>
+                                <button type="submit" class="btn btn-submit">✓ Simpan Data</button>
+                                <button type="reset" class="btn btn-reset">🔄 Reset</button>
                             </div>
                         </form>
 
@@ -416,28 +656,29 @@
                 <!-- Tab Air Bersih -->
                 <div id="air-bersih" class="tab-content">
                     <div class="form-container">
-                        <h2>Input Pemeliharaan Jaringan Air Bersih</h2>
-                        <div class="success-message" id="airBersihSuccess">Data berhasil disimpan!</div>
-                        <form id="formAirBersih" onsubmit="submitForm(event, 'air-bersih')">
+                        <h2>💧 Input Pemeliharaan Jaringan Air Bersih</h2>
+                        <div class="success-message" id="airBersihSuccess" style="display: none;">✓ Data berhasil disimpan!</div>
+                        <div class="error-message" id="airBersihError" style="display: none;"></div>
+                        <form id="formAirBersih" onsubmit="submitForm(event, 'air-bersih')" class="admin-form">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="tgl_air_bersih">Tanggal Pemeliharaan</label>
-                                    <input type="date" id="tgl_air_bersih" required>
+                                    <label for="tgl_air_bersih">📅 Tanggal Pemeliharaan</label>
+                                    <input type="date" id="tgl_air_bersih" required class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="teknisi_air_bersih">Nama Teknisi</label>
-                                    <input type="text" id="teknisi_air_bersih" required placeholder="Nama teknisi">
+                                    <label for="teknisi_air_bersih">👨‍🔧 Nama Teknisi</label>
+                                    <input type="text" id="teknisi_air_bersih" required placeholder="Masukkan nama teknisi" class="form-input">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="lokasi_air_bersih">Lokasi Pipa</label>
-                                    <input type="text" id="lokasi_air_bersih" required placeholder="Lokasi">
+                                    <label for="lokasi_air_bersih">📍 Lokasi Pipa</label>
+                                    <input type="text" id="lokasi_air_bersih" required placeholder="Contoh: Tangki Utama, Ruang Pompa, dll" class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="jenis_pekerjaan_air_bersih">Jenis Pekerjaan</label>
-                                    <select id="jenis_pekerjaan_air_bersih" required>
-                                        <option value="">Pilih jenis pekerjaan</option>
+                                    <label for="jenis_pekerjaan_air_bersih">🔧 Jenis Pekerjaan</label>
+                                    <select id="jenis_pekerjaan_air_bersih" required class="form-input">
+                                        <option value="">-- Pilih jenis pekerjaan --</option>
                                         <option value="Pembersihan Tangki">Pembersihan Tangki</option>
                                         <option value="Perbaikan Pipa">Perbaikan Pipa</option>
                                         <option value="Penggantian Pipa">Penggantian Pipa</option>
@@ -448,13 +689,13 @@
                             </div>
                             <div class="form-row full">
                                 <div class="form-group">
-                                    <label for="deskripsi_air_bersih">Deskripsi Pekerjaan</label>
-                                    <textarea id="deskripsi_air_bersih" required placeholder="Jelaskan detail pekerjaan yang dilakukan"></textarea>
+                                    <label for="deskripsi_air_bersih">📝 Deskripsi Pekerjaan</label>
+                                    <textarea id="deskripsi_air_bersih" required placeholder="Jelaskan detail pekerjaan yang dilakukan..." class="form-input" style="min-height: 120px;"></textarea>
                                 </div>
                             </div>
                             <div class="form-buttons">
-                                <button type="submit" class="btn btn-submit">Simpan Data</button>
-                                <button type="reset" class="btn btn-reset">Reset</button>
+                                <button type="submit" class="btn btn-submit">✓ Simpan Data</button>
+                                <button type="reset" class="btn btn-reset">🔄 Reset</button>
                             </div>
                         </form>
 
@@ -485,28 +726,29 @@
                 <!-- Tab Air Kotor -->
                 <div id="air-kotor" class="tab-content">
                     <div class="form-container">
-                        <h2>Input Pemeliharaan Jaringan Air Kotor</h2>
-                        <div class="success-message" id="airKotorSuccess">Data berhasil disimpan!</div>
-                        <form id="formAirKotor" onsubmit="submitForm(event, 'air-kotor')">
+                        <h2>🚰 Input Pemeliharaan Jaringan Air Kotor</h2>
+                        <div class="success-message" id="airKotorSuccess" style="display: none;">✓ Data berhasil disimpan!</div>
+                        <div class="error-message" id="airKotorError" style="display: none;"></div>
+                        <form id="formAirKotor" onsubmit="submitForm(event, 'air-kotor')" class="admin-form">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="tgl_air_kotor">Tanggal Pemeliharaan</label>
-                                    <input type="date" id="tgl_air_kotor" required>
+                                    <label for="tgl_air_kotor">📅 Tanggal Pemeliharaan</label>
+                                    <input type="date" id="tgl_air_kotor" required class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="teknisi_air_kotor">Nama Teknisi</label>
-                                    <input type="text" id="teknisi_air_kotor" required placeholder="Nama teknisi">
+                                    <label for="teknisi_air_kotor">👨‍🔧 Nama Teknisi</label>
+                                    <input type="text" id="teknisi_air_kotor" required placeholder="Masukkan nama teknisi" class="form-input">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="lokasi_air_kotor">Lokasi Saluran</label>
-                                    <input type="text" id="lokasi_air_kotor" required placeholder="Lokasi">
+                                    <label for="lokasi_air_kotor">📍 Lokasi Saluran</label>
+                                    <input type="text" id="lokasi_air_kotor" required placeholder="Contoh: Septik Tank, Saluran Drainase, dll" class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="jenis_pekerjaan_air_kotor">Jenis Pekerjaan</label>
-                                    <select id="jenis_pekerjaan_air_kotor" required>
-                                        <option value="">Pilih jenis pekerjaan</option>
+                                    <label for="jenis_pekerjaan_air_kotor">🔧 Jenis Pekerjaan</label>
+                                    <select id="jenis_pekerjaan_air_kotor" required class="form-input">
+                                        <option value="">-- Pilih jenis pekerjaan --</option>
                                         <option value="Pemompaan Septic Tank">Pemompaan Septic Tank</option>
                                         <option value="Pembersihan Saluran">Pembersihan Saluran</option>
                                         <option value="Perbaikan Saluran">Perbaikan Saluran</option>
@@ -517,13 +759,13 @@
                             </div>
                             <div class="form-row full">
                                 <div class="form-group">
-                                    <label for="deskripsi_air_kotor">Deskripsi Pekerjaan</label>
-                                    <textarea id="deskripsi_air_kotor" required placeholder="Jelaskan detail pekerjaan yang dilakukan"></textarea>
+                                    <label for="deskripsi_air_kotor">📝 Deskripsi Pekerjaan</label>
+                                    <textarea id="deskripsi_air_kotor" required placeholder="Jelaskan detail pekerjaan yang dilakukan..." class="form-input" style="min-height: 120px;"></textarea>
                                 </div>
                             </div>
                             <div class="form-buttons">
-                                <button type="submit" class="btn btn-submit">Simpan Data</button>
-                                <button type="reset" class="btn btn-reset">Reset</button>
+                                <button type="submit" class="btn btn-submit">✓ Simpan Data</button>
+                                <button type="reset" class="btn btn-reset">🔄 Reset</button>
                             </div>
                         </form>
 
@@ -554,28 +796,29 @@
                 <!-- Tab AC -->
                 <div id="ac" class="tab-content">
                     <div class="form-container">
-                        <h2>Input Perbaikan AC (Pendingin Ruangan)</h2>
-                        <div class="success-message" id="acSuccess">Data berhasil disimpan!</div>
-                        <form id="formAC" onsubmit="submitForm(event, 'ac')">
+                        <h2>❄️ Input Perbaikan AC (Pendingin Ruangan)</h2>
+                        <div class="success-message" id="acSuccess" style="display: none;">✓ Data berhasil disimpan!</div>
+                        <div class="error-message" id="acError" style="display: none;"></div>
+                        <form id="formAC" onsubmit="submitForm(event, 'ac')" class="admin-form">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="tgl_ac">Tanggal Perbaikan</label>
-                                    <input type="date" id="tgl_ac" required>
+                                    <label for="tgl_ac">📅 Tanggal Perbaikan</label>
+                                    <input type="date" id="tgl_ac" required class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="teknisi_ac">Nama Teknisi</label>
-                                    <input type="text" id="teknisi_ac" required placeholder="Nama teknisi">
+                                    <label for="teknisi_ac">👨‍🔧 Nama Teknisi</label>
+                                    <input type="text" id="teknisi_ac" required placeholder="Masukkan nama teknisi" class="form-input">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="lokasi_ac">Lokasi AC</label>
-                                    <input type="text" id="lokasi_ac" required placeholder="Lokasi/Ruangan">
+                                    <label for="lokasi_ac">📍 Lokasi AC</label>
+                                    <input type="text" id="lokasi_ac" required placeholder="Contoh: Ruang Server, Ruang Kantor, dll" class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="jenis_pekerjaan_ac">Jenis Pekerjaan</label>
-                                    <select id="jenis_pekerjaan_ac" required>
-                                        <option value="">Pilih jenis pekerjaan</option>
+                                    <label for="jenis_pekerjaan_ac">🔧 Jenis Pekerjaan</label>
+                                    <select id="jenis_pekerjaan_ac" required class="form-input">
+                                        <option value="">-- Pilih jenis pekerjaan --</option>
                                         <option value="Servis Berkala">Servis Berkala</option>
                                         <option value="Pembersihan Filter">Pembersihan Filter</option>
                                         <option value="Pengecekan Refrigeran">Pengecekan Refrigeran</option>
@@ -587,13 +830,13 @@
                             </div>
                             <div class="form-row full">
                                 <div class="form-group">
-                                    <label for="deskripsi_ac">Deskripsi Perbaikan</label>
-                                    <textarea id="deskripsi_ac" required placeholder="Jelaskan detail perbaikan yang dilakukan"></textarea>
+                                    <label for="deskripsi_ac">📝 Deskripsi Perbaikan</label>
+                                    <textarea id="deskripsi_ac" required placeholder="Jelaskan detail perbaikan yang dilakukan..." class="form-input" style="min-height: 120px;"></textarea>
                                 </div>
                             </div>
                             <div class="form-buttons">
-                                <button type="submit" class="btn btn-submit">Simpan Data</button>
-                                <button type="reset" class="btn btn-reset">Reset</button>
+                                <button type="submit" class="btn btn-submit">✓ Simpan Data</button>
+                                <button type="reset" class="btn btn-reset">🔄 Reset</button>
                             </div>
                         </form>
 
@@ -624,28 +867,29 @@
                 <!-- Tab Kendaraan Dinas -->
                 <div id="kendaraan" class="tab-content">
                     <div class="form-container">
-                        <h2>Input Penggunaan Kendaraan Dinas</h2>
-                        <div class="success-message" id="kendaraanSuccess">Data berhasil disimpan!</div>
-                        <form id="formKendaraan" onsubmit="submitForm(event, 'kendaraan')">
+                        <h2>🚗 Input Penggunaan Kendaraan Dinas</h2>
+                        <div class="success-message" id="kendaraanSuccess" style="display: none;">✓ Data berhasil disimpan!</div>
+                        <div class="error-message" id="kendaraanError" style="display: none;"></div>
+                        <form id="formKendaraan" onsubmit="submitForm(event, 'kendaraan')" class="admin-form">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="tgl_kendaraan">Tanggal Penggunaan</label>
-                                    <input type="date" id="tgl_kendaraan" required>
+                                    <label for="tgl_kendaraan">📅 Tanggal Penggunaan</label>
+                                    <input type="date" id="tgl_kendaraan" required class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="pengemudi">Nama Pengemudi</label>
-                                    <input type="text" id="pengemudi" required placeholder="Nama pengemudi">
+                                    <label for="pengemudi">👤 Nama Pengemudi</label>
+                                    <input type="text" id="pengemudi" required placeholder="Masukkan nama pengemudi" class="form-input">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="no_polisi">Nomor Polisi Kendaraan</label>
-                                    <input type="text" id="no_polisi" required placeholder="Contoh: AB 1234 CD">
+                                    <label for="no_polisi">🔖 Nomor Polisi Kendaraan</label>
+                                    <input type="text" id="no_polisi" required placeholder="Contoh: AB 1234 CD" class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="jenis_kendaraan">Jenis Kendaraan</label>
-                                    <select id="jenis_kendaraan" required>
-                                        <option value="">Pilih jenis kendaraan</option>
+                                    <label for="jenis_kendaraan">🚙 Jenis Kendaraan</label>
+                                    <select id="jenis_kendaraan" required class="form-input">
+                                        <option value="">-- Pilih jenis kendaraan --</option>
                                         <option value="Mobil">Mobil</option>
                                         <option value="Motor">Motor</option>
                                         <option value="Truk">Truk</option>
@@ -655,33 +899,33 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="tujuan">Tujuan Penggunaan</label>
-                                    <input type="text" id="tujuan" required placeholder="Tujuan perjalanan">
+                                    <label for="tujuan">🎯 Tujuan Penggunaan</label>
+                                    <input type="text" id="tujuan" required placeholder="Masukkan tujuan perjalanan" class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="km_awal">KM Awal</label>
-                                    <input type="number" id="km_awal" required placeholder="Masukkan KM">
+                                    <label for="km_awal">⏱️ KM Awal</label>
+                                    <input type="number" id="km_awal" required placeholder="Masukkan KM" class="form-input">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="km_akhir">KM Akhir</label>
-                                    <input type="number" id="km_akhir" required placeholder="Masukkan KM">
+                                    <label for="km_akhir">⏱️ KM Akhir</label>
+                                    <input type="number" id="km_akhir" required placeholder="Masukkan KM" class="form-input">
                                 </div>
                                 <div class="form-group">
-                                    <label for="durasi">Durasi (Jam)</label>
-                                    <input type="number" id="durasi" step="0.5" required placeholder="Durasi dalam jam">
+                                    <label for="durasi">⏲️ Durasi (Jam)</label>
+                                    <input type="number" id="durasi" step="0.5" required placeholder="Durasi dalam jam" class="form-input">
                                 </div>
                             </div>
                             <div class="form-row full">
                                 <div class="form-group">
-                                    <label for="keterangan_kendaraan">Keterangan</label>
-                                    <textarea id="keterangan_kendaraan" placeholder="Keterangan tambahan (opsional)"></textarea>
+                                    <label for="keterangan_kendaraan">📝 Keterangan</label>
+                                    <textarea id="keterangan_kendaraan" placeholder="Keterangan tambahan (opsional)" class="form-input" style="min-height: 100px;"></textarea>
                                 </div>
                             </div>
                             <div class="form-buttons">
-                                <button type="submit" class="btn btn-submit">Simpan Data</button>
-                                <button type="reset" class="btn btn-reset">Reset</button>
+                                <button type="submit" class="btn btn-submit">✓ Simpan Data</button>
+                                <button type="reset" class="btn btn-reset">🔄 Reset</button>
                             </div>
                         </form>
 
@@ -724,7 +968,7 @@
                         </div>
 
                         <!-- Form input gallery per kategori -->
-                        <form onsubmit="submitGalleryForm(event)" style="background: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <form id="formGalleryUpload" onsubmit="submitGalleryForm(event)" style="background: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
                             <div id="galleryFormContent">
                                 <!-- Content akan diisi dinamis per kategori -->
                             </div>
